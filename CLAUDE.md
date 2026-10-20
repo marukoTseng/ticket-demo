@@ -11,15 +11,24 @@
 | 分支 | 用途 |
 |---|---|
 | `main` | 整合各 feature、hotfix 內容，產出 prod 新版 |
-| `hotfix` | 緊急修復 prod 版本錯誤，從 `main` 切出 |
+| `hotfix/*` | 緊急修復 prod 版本錯誤，從 `main` 切出 |
 | `sit` | 上線前 PT 測試 |
 | `dev` | 共用的整合分支，所有 feature 都從 `dev` 切出 |
 | `feature/*` | 開發新功能 |
 
-- feature 分支命名：`feature/西元年_月份_CR需求名稱`，月份兩位數，例：`feature/2026_10_SQLServer開發環境`
-- feature 完成後開 PR 合併回 `dev`
 - `main`、`dev`、`sit` 受 GitHub ruleset 保護：不可直接 push、強推或刪除，只能透過 PR 合併
-- 待定義：`dev → sit → main` 的推進方式、hotfix 分支命名、hotfix 合併回 `dev` / `sit` 的方式
+
+**命名**
+
+- feature：`feature/西元年_月份_CR需求名稱`，月份兩位數，例：`feature/2026_10_SQLServer開發環境`
+- hotfix：`hotfix/西元年_月份_編號_問題`，例：`hotfix/2026_10_2_忘記密碼token時限`
+
+**流程**
+
+1. 開發：從 `dev` 切出 `feature/*`，完成後開 PR 合併回 `dev`
+2. 上線前：從 `dev` 開 PR 到 `sit`，進行 PT 測試
+3. 上線：PT 測完，從 `sit` 開 PR 到 `main`，產出 prod 新版
+4. 緊急修復：從 `main` 切出 `hotfix/*`，修好後開 PR 合併回 `main`；**上線後**再把 `main` 同步回 `dev` 與 `sit`（各開一個 PR）
 
 ### Commit 格式
 
