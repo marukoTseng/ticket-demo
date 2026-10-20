@@ -1,0 +1,28 @@
+# Local development database for ticket-demo.
+# Usage:
+#   1. cp .env.example .env   and set MSSQL_SA_PASSWORD
+#   2. docker compose up -d
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2025-CU9-ubuntu-24.04
+    container_name: ticket-demo-mssql
+    environment:
+      ACCEPT_EULA: "Y"
+      # Standard Developer: free, non-production, limited to Standard edition features
+      MSSQL_PID: "StandardDeveloper"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD in .env}
+      TZ: "Asia/Taipei"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q \"SELECT 1\" -b -o /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  mssql-data:
