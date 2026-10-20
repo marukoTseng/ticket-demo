@@ -61,8 +61,12 @@
 
 PR 標題沿用該 PR 主要 commit 的標籤格式。
 
+commit 訊息與 PR 說明不寫帳號名稱、密碼或機密的存放位置。
+
+commit 作者使用本 repo 設定的 GitHub noreply 信箱（`git config user.email`），不要用個人信箱。
+
 ## 本機開發環境
 
-- SQL Server：`docker compose up -d`（設定見 `docker-compose.yml`，sa 密碼放在不進版控的 `.env`，範本為 `.env.example`）
+- SQL Server：`docker compose up -d`（設定見 `docker-compose.yml`，連線所需的機密設定不進版控，依 `.env.example` 建立）
 - 資料庫：`ticket_demo`，定序 `Chinese_Taiwan_Stroke_CI_AS`
 - JDK：Temurin 17，`JAVA_HOME=C:\Program Files\Java\jdk-17-temurin`
