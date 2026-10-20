@@ -65,8 +65,18 @@ commit 訊息與 PR 說明不寫帳號名稱、密碼或機密的存放位置。
 
 commit 作者使用本 repo 設定的 GitHub noreply 信箱（`git config user.email`），不要用個人信箱。
 
+## DB Script
+
+- 所有 DB script（建庫、建帳號、schema、資料異動）都要進版控，放在 `db/` 底下；有 DB script 的 commit 標 `[DB Script:是]`
+- 涉及密碼等機敏欄位時，不寫真實值，改用佔位變數或範例值：
+  - 由工具執行的腳本用 sqlcmd 變數，例：`WITH PASSWORD = N'$(APP_DB_PASSWORD)'`，實際值由不進版控的環境設定提供
+  - 需人工執行的腳本用明顯的範例值，例：`N'<請替換為實際密碼>'`，並在註解說明須替換
+- 腳本盡量可重複執行（先判斷是否存在再建立）
+
 ## 本機開發環境
 
 - SQL Server：`docker compose up -d`（設定見 `docker-compose.yml`，連線所需的機密設定不進版控，依 `.env.example` 建立）
-- 資料庫：`ticket_demo`，定序 `Chinese_Taiwan_Stroke_CI_AS`
+- 資料庫：`ticket_demo`，定序 `Chinese_Taiwan_Stroke_CI_AS`；啟動時由 `db/init/*.sql` 自動建立資料庫與應用程式帳號
+- 後端連線使用應用程式帳號（僅限 `ticket_demo`），不使用 sa
+- 1433 僅綁定 127.0.0.1
 - JDK：Temurin 17，`JAVA_HOME=C:\Program Files\Java\jdk-17-temurin`
